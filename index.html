@@ -1,230 +1,287 @@
-<!DOCTYPE html>
-<script src="auth.js"></script>
-<html lang="en">
+<!doctype html>
+<html lang="th">
 <head>
-<meta charset="UTF-8">
-<title>Ran A Han</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-/* Make the top navbar title look exactly like customer_home */
-.brand { font-weight: 800; font-size: 1.6rem; color: #fff; text-decoration: none; }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ran A Han</title>
 
+  <!-- Bootstrap 5 -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
 
-.promo-card img { height:200px; object-fit:cover; }
-.menu-card img { height:150px; object-fit:cover; }
-</style>
+  <style>
+    body { background: #fafafa; }
+    .navbar-brand { font-weight: 700; letter-spacing: .5px; }
+    .hero {
+      background: linear-gradient(180deg, #dc3545 0%, #b82b39 100%);
+      color: #fff; padding: 3rem 0; margin-bottom: 2rem;
+    }
+    .promo-card img, .menu-card img { object-fit: cover; height: 160px; }
+    .card { border: none; border-radius: 1rem; overflow: hidden; }
+    .badge { font-size: .8rem; }
+    .section-title { font-weight: 700; letter-spacing: .3px; }
+    footer { color: #666; }
+  </style>
+
+  <script src="./config.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-dark bg-danger px-3">
-<a href="#" class="navbar-brand brand">Ran A Han</a>
-<div class="ms-auto d-flex gap-2">
-<button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
-<button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-</div>
-</nav>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-light border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand text-danger" href="./">Ran A Han</a>
 
+      <div class="ms-auto d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">
+          Register
+        </button>
+        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal" id="openLogin">
+          Login
+        </button>
+      </div>
+    </div>
+  </nav>
 
-<div class="container my-4">
-<h3>🍽️ Welcome to Ran A Han</h3>
-<p>Discover our menu and promotions!</p>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="display-6 mb-2">อร่อยง่าย ๆ กับเรา</h1>
+      <p class="mb-0">โปรโมชันพิเศษ &amp; เมนูยอดนิยม อัปเดตทุกวัน</p>
+    </div>
+  </section>
 
+  <!-- Promotions -->
+  <section class="container mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h2 class="h4 section-title mb-0">Promotions</h2>
+      <span class="text-muted" id="promoCount"></span>
+    </div>
+    <div class="row" id="promoContainer">
+      <!-- promotions go here -->
+    </div>
+  </section>
 
-<!-- Promotion Section -->
-<h4 class="mt-4">Latest Promotions</h4>
-<div class="row" id="promoContainer"></div>
+  <!-- Menu -->
+  <section class="container mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h2 class="h4 section-title mb-0">Menu</h2>
+      <span class="text-muted" id="menuCount"></span>
+    </div>
+    <div class="row" id="menuContainer">
+      <!-- menu items go here -->
+    </div>
+  </section>
 
+  <footer class="container pb-5">
+    <hr />
+    <div class="d-flex justify-content-between align-items-center">
+      <small>© <span id="y"></span> Ran A Han</small>
+      <small class="text-muted">Powered by Vercel + Render + Neon</small>
+    </div>
+  </footer>
 
-<!-- Menu Section -->
-<h4 class="mt-5">Our Menu</h4>
-<div class="row" id="menuContainer"></div>
-</div>
-
-
-<!-- Register Modal -->
-<div class="modal fade" id="registerModal" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
-<div class="modal-content p-3">
-<h5 class="mb-3">Register</h5>
-<input id="regUser" type="text" class="form-control mb-2" placeholder="Username">
-<input id="regPwd" type="password" class="form-control mb-3" placeholder="Password">
-<button class="btn btn-success w-100" id="btnRegister">Register</button>
-</div>
-</div>
-</div>
-
-<!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-3">
-      <h5 class="mb-3">Login</h5>
-      <input id="loginUser" type="text" class="form-control mb-2" placeholder="Username">
-      <input id="loginPwd" type="password" class="form-control mb-3" placeholder="Password">
-      <button class="btn btn-danger w-100" id="btnLogin">Login</button>
+  <!-- Register Modal -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content rounded-4">
+        <div class="modal-header">
+          <h5 class="modal-title">Register</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">
+            <label class="form-label">Username</label>
+            <input class="form-control" id="regUser" placeholder="username" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" id="regPwd" placeholder="••••••••" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" id="btnRegister">Register</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<footer class="bg-dark text-light text-center py-3 mt-4">
-  <p class="mb-0">&copy; 2025 Ran A Han. All rights reserved.</p>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-const API_BASE = "https://beckend-sa-ran-a-han.onrender.com";
-
-// ================= REGISTER =================
-document.getElementById('btnRegister').addEventListener('click', async ()=>{
-  const username = document.getElementById('regUser').value.trim();
-  const password = document.getElementById('regPwd').value.trim();
-  if(!username || !password){ alert("Insert all information"); return; }
-
-  let res = await fetch(`${API_BASE}/register`, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({username,password})
-  });
-  let data = await res.json();
-  if(data.success){
-    alert("Register สำเร็จ!");
-    bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
-  } else {
-    alert("Error: " + (data.error||"Can't register"));
-  }
-});
-
-// ================= LOGIN =================
-document.getElementById('btnLogin').addEventListener('click', async ()=>{
-  const username = document.getElementById('loginUser').value.trim();
-  const password = document.getElementById('loginPwd').value.trim();
-  if(!username || !password){ alert("Inserrt all information"); return; }
-
-  let res = await fetch(`${API_BASE}/login`, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({username,password})
-  });
-  let user = await res.json();
-
-  if(user.error){
-    alert("Login ไม่สำเร็จ: " + user.error);
-    return;
-  }
-
-  // เก็บ user
-  sessionStorage.setItem("ranUser", JSON.stringify(user));
-
-  // Redirect ตาม role
-  if(user.role==="manager"){
-    window.location.href="manager_stock.html";
-  } else if(user.role==="staff"){
-    window.location.href="staff_stock.html";
-  } else if(user.role==="moniter"){
-    window.location.href="moniter_home.html";
-  } else {
-    window.location.href="customer_home.html";
-  }
-});
-
-// ================= PROMOTIONS =================
-async function renderPromotions(){
-  let res = await fetch(`${API_BASE}/promotions`);
-  let promos = await res.json();
-  let container = document.getElementById('promoContainer');
-  container.innerHTML = "";
-  if(promos.length===0){
-    container.innerHTML = "<p class='text-muted'>No promotions available</p>";
-    return;
-  }
-  promos.forEach(p=>{
-    let statusClass = p.status==="Active" ? "bg-success text-white" : "bg-danger text-white";
-    container.innerHTML += `
-      <div class="col-md-4 mb-3">
-        <div class="card promo-card shadow-sm">
-          <img src="${p.image||'https://via.placeholder.com/300x200'}" class="card-img-top">
-          <div class="card-body">
-            <h5 class="card-title">${p.name}</h5>
-            <p class="card-text">${p.desc}</p>
-            <p><strong>Date:</strong> ${p.date}</p>
-            <span class="badge ${statusClass}">${p.status}</span>
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content rounded-4">
+        <div class="modal-header">
+          <h5 class="modal-title">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">
+            <label class="form-label">Username</label>
+            <input class="form-control" id="loginUser" placeholder="username" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPwd" placeholder="••••••••" />
           </div>
         </div>
-      </div>`;
-  });
-}
-
-// ================= MENU =================
-async function renderMenu(){
-  let res = await fetch(`${API_BASE}/menu`);
-  let menu = await res.json();
-  let container = document.getElementById('menuContainer');
-  container.innerHTML = "";
-  if(menu.length===0){
-    container.innerHTML = "<p class='text-muted'>No menu available</p>";
-    return;
-  }
-  menu.forEach(m=>{
-    container.innerHTML += `
-      <div class="col-md-3 mb-3">
-        <div class="card menu-card shadow-sm">
-          <img src="${m.image||'https://via.placeholder.com/200x150'}" class="card-img-top">
-          <div class="card-body">
-            <h6 class="card-title">${m.englishName}</h6>
-            <p class="card-text text-muted">${m.type}</p>
-            <p><strong>${m.price} THB</strong></p>
-          </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" id="btnLogin">Login</button>
         </div>
-      </div>`;
-  });
-}
+      </div>
+    </div>
+  </div>
 
-document.addEventListener("DOMContentLoaded", ()=>{
-  renderPromotions();
-  renderMenu();
+  <!-- Bootstrap JS -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
 
-  document.getElementById("loginBtn").addEventListener("click", async ()=>{
-  let username = document.getElementById("username").value;
-  let password = document.getElementById("password").value;
+  <script>
+    // Utils
+    document.getElementById("y").textContent = new Date().getFullYear();
 
-  let res = await fetch("https://beckend-sa-ran-a-han.onrender.com", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({username,password})
-  });
-  let r = await res.json();
-
-  if(r.error){
-    alert(r.error);
-  }else{
-    sessionStorage.setItem("ranUser", JSON.stringify(r));
-    if(r.role === "moniter"){
-      window.location.href = "moniter_home.html";
-    }else if(r.role === "manager"){
-      window.location.href = "manager_stock.html";
-    }else if(r.role === "staff"){
-      window.location.href = "staff_payment.html";
-    }else{
-      window.location.href = "customer_home.html";
+    async function api(path, opts = {}) {
+      const res = await fetch(`${API_BASE}${path}`, {
+        headers: { "Content-Type": "application/json" },
+        ...opts,
+      });
+      if (!res.ok) {
+        const t = await res.text().catch(() => "");
+        throw new Error(`HTTP ${res.status} ${res.statusText} ${t}`);
+      }
+      const txt = await res.text();
+      return txt ? JSON.parse(txt) : {};
     }
-  }
-});
 
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const btnLogout = document.getElementById('btnLogout');
-  if (btnLogout) {
-    btnLogout.addEventListener('click', () => {
-      sessionStorage.removeItem('ranUser');
-      localStorage.removeItem('ranUser');
-      location.href = 'index.html';
+    // Register
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      const username = document.getElementById("regUser").value.trim();
+      const password = document.getElementById("regPwd").value.trim();
+      if (!username || !password) return alert("กรอกข้อมูลให้ครบ");
+      try {
+        const data = await api("/register", {
+          method: "POST",
+          body: JSON.stringify({ username, password }),
+        });
+        if (data.success) {
+          alert("Register สำเร็จ!");
+          const m = bootstrap.Modal.getInstance(document.getElementById("registerModal"));
+          m && m.hide();
+        } else {
+          alert("Register ไม่สำเร็จ: " + (data.error || "unknown"));
+        }
+      } catch (e) {
+        alert(e.message);
+      }
     });
-  }
-  // ปุ่ม/element อื่น ๆ ก็เช็คแบบเดียวกัน
-});
-</script>
-  
+
+    // Login
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      const username = document.getElementById("loginUser").value.trim();
+      const password = document.getElementById("loginPwd").value.trim();
+      if (!username || !password) return alert("กรอกข้อมูลให้ครบ");
+      try {
+        const user = await api("/login", {
+          method: "POST",
+          body: JSON.stringify({ username, password }),
+        });
+        if (user.error) return alert("Login ไม่สำเร็จ: " + user.error);
+
+        sessionStorage.setItem("ranUser", JSON.stringify(user));
+        if (user.role === "manager")      window.location.href = "manager_stock.html";
+        else if (user.role === "staff")   window.location.href = "staff_payment.html"; // หรือ staff_order.html
+        else if (user.role === "moniter") window.location.href = "moniter_home.html";
+        else                              window.location.href = "customer_home.html";
+      } catch (e) {
+        alert(e.message);
+      }
+    });
+
+    // Promotions
+    async function renderPromotions() {
+      const container = document.getElementById("promoContainer");
+      container.innerHTML = `<div class="col-12 text-muted">Loading promotions...</div>`;
+      try {
+        const promos = await api("/promotions");
+        document.getElementById("promoCount").textContent = promos.length ? `${promos.length} items` : "";
+        container.innerHTML = "";
+        if (!Array.isArray(promos) || !promos.length) {
+          container.innerHTML = `<div class="col-12 text-muted">No promotions available</div>`;
+          return;
+        }
+        promos.forEach((p) => {
+          const title = p.title ?? p.name ?? "Promotion";
+          const description = p.description ?? p.desc ?? "";
+          const dateText =
+            p.start_date && p.end_date ? `${p.start_date} - ${p.end_date}` : (p.date ?? "");
+          const isActive = typeof p.active === "boolean" ? p.active : p.status === "Active";
+          const statusClass = isActive ? "bg-success text-white" : "bg-danger text-white";
+          const image = p.image || "https://via.placeholder.com/600x360?text=Promotion";
+          container.innerHTML += `
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="card promo-card shadow-sm">
+                <img src="${image}" class="card-img-top" alt="promo" />
+                <div class="card-body">
+                  <h5 class="card-title">${title}</h5>
+                  <p class="card-text">${description}</p>
+                  ${dateText ? `<p class="mb-2"><strong>Date:</strong> ${dateText}</p>` : ""}
+                  <span class="badge ${statusClass}">${isActive ? "Active" : "Inactive"}</span>
+                </div>
+              </div>
+            </div>`;
+        });
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="col-12 text-danger">Failed to load promotions.</div>`;
+      }
+    }
+
+    // Menu
+    async function renderMenu() {
+      const container = document.getElementById("menuContainer");
+      container.innerHTML = `<div class="col-12 text-muted">Loading menu...</div>`;
+      try {
+        const menu = await api("/menu");
+        document.getElementById("menuCount").textContent = Array.isArray(menu) ? `${menu.length} items` : "";
+        container.innerHTML = "";
+        if (!Array.isArray(menu) || !menu.length) {
+          container.innerHTML = `<div class="col-12 text-muted">No menu available</div>`;
+          return;
+        }
+        menu.forEach((m) => {
+          const name = m.name ?? m.englishName ?? "Menu";
+          const category = m.category ?? m.type ?? "";
+          const price = m.price ?? 0;
+          const image = m.image || "https://via.placeholder.com/400x260?text=Menu";
+          container.innerHTML += `
+            <div class="col-6 col-md-3 mb-3">
+              <div class="card menu-card shadow-sm">
+                <img src="${image}" class="card-img-top" alt="menu" />
+                <div class="card-body">
+                  <h6 class="card-title mb-1">${name}</h6>
+                  <p class="card-text text-muted mb-2">${category}</p>
+                  <p class="mb-0"><strong>${price} THB</strong></p>
+                </div>
+              </div>
+            </div>`;
+        });
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="col-12 text-danger">Failed to load menu.</div>`;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderPromotions();
+      renderMenu();
+    });
+  </script>
 </body>
 </html>

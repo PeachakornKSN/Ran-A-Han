@@ -211,5 +211,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btnLogout = document.getElementById('btnLogout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      sessionStorage.removeItem('ranUser');
+      localStorage.removeItem('ranUser');
+      location.href = 'index.html';
+    });
+  }
+  // ปุ่ม/element อื่น ๆ ก็เช็คแบบเดียวกัน
+});
+</script>
+  
 </body>
 </html>

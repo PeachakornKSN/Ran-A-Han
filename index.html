@@ -77,7 +77,7 @@ const API_BASE = "https://beckend-sa-ran-a-han.onrender.com";
 document.getElementById('btnRegister').addEventListener('click', async ()=>{
   const username = document.getElementById('regUser').value.trim();
   const password = document.getElementById('regPwd').value.trim();
-  if(!username || !password){ alert("กรอกข้อมูลให้ครบ"); return; }
+  if(!username || !password){ alert("Insert all information"); return; }
 
   let res = await fetch(`${API_BASE}/register`, {
     method:"POST",
@@ -89,7 +89,7 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
     alert("Register สำเร็จ!");
     bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
   } else {
-    alert("Error: " + (data.error||"ไม่สามารถสมัครได้"));
+    alert("Error: " + (data.error||"Can't register"));
   }
 });
 
@@ -97,7 +97,7 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
 document.getElementById('btnLogin').addEventListener('click', async ()=>{
   const username = document.getElementById('loginUser').value.trim();
   const password = document.getElementById('loginPwd').value.trim();
-  if(!username || !password){ alert("กรอกข้อมูลให้ครบ"); return; }
+  if(!username || !password){ alert("Inserrt all information"); return; }
 
   let res = await fetch(`${API_BASE}/login`, {
     method:"POST",
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   let username = document.getElementById("username").value;
   let password = document.getElementById("password").value;
 
-  let res = await fetch("http://localhost:3000/api/login", {
+  let res = await fetch("https://beckend-sa-ran-a-han.onrender.com", {
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body: JSON.stringify({username,password})

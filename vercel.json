@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://beckend-sa-ran-a-han.onrender.com"
+    }
+  ]
+}
